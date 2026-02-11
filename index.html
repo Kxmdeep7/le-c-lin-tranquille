@@ -10,83 +10,82 @@
         * { margin: 0; padding: 0; box-sizing: border-box; touch-action: none; }
         
         body { 
-            background: #020202; 
+            background: #000; 
             overflow: hidden; 
             font-family: 'Montserrat', sans-serif;
-            transition: background 5s ease;
         }
 
-        #starfield {
+        /* REAL GALAXY BACKGROUND */
+        #galaxy-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 1;
+            background: url('https://images.unsplash.com/photo-1506318137071-a8e063b4bcc0?q=80&w=2070&auto=format&fit=crop') no-repeat center center;
+            background-size: cover;
+            opacity: 0.6;
+            z-index: 0;
+            filter: brightness(0.8);
+            transition: transform 10s ease-out, opacity 4s;
         }
 
         #landing {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; justify-content: center; align-items: center;
             z-index: 10; flex-direction: column; text-align: center;
+            background: rgba(0,0,0,0.4);
         }
 
         .quiet-text {
-            color: #e0e0e0; font-size: 0.95rem; letter-spacing: 4px;
-            opacity: 0; transition: opacity 3s ease; line-height: 2.5;
-            font-weight: 200; text-shadow: 0 0 10px rgba(255,255,255,0.2);
+            color: #fff; font-size: 1.1rem; letter-spacing: 4px;
+            opacity: 0; transition: opacity 2s ease; line-height: 2.5;
+            font-weight: 200;
         }
 
-        /* STAGE 2: THE REALISTIC STARS */
+        /* STAGE 2: STAR ORBS */
         #interaction-stage {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: none; z-index: 5;
         }
 
         .star-orb {
-            position: absolute; width: 100px; height: 100px;
-            background: radial-gradient(circle, 
-                #fff 0%, 
-                rgba(255, 255, 255, 0.8) 10%, 
-                rgba(255, 240, 200, 0.4) 30%, 
-                rgba(212, 175, 55, 0.1) 60%, 
-                transparent 75%);
+            position: absolute; width: 80px; height: 80px;
+            background: radial-gradient(circle, #fff 0%, rgba(255, 255, 255, 0.8) 15%, rgba(212, 175, 55, 0.3) 50%, transparent 70%);
             border-radius: 50%; cursor: pointer;
             z-index: 15;
-            /* Twinkle effect */
-            animation: twinkle 3s infinite ease-in-out;
+            animation: twinkle 2s infinite ease-in-out;
         }
 
-        /* The bright core of the star */
         .star-core {
             position: absolute; top: 48%; left: 48%;
             width: 4px; height: 4px; background: white;
-            border-radius: 50%; box-shadow: 0 0 15px 2px white;
+            border-radius: 50%; box-shadow: 0 0 20px 3px white;
         }
 
         #instruction {
-            position: absolute; bottom: 12%; width: 100%; text-align: center;
-            font-size: 0.55rem; letter-spacing: 6px; color: #555;
-            text-transform: uppercase; opacity: 0; transition: opacity 3s;
+            position: absolute; bottom: 15%; width: 100%; text-align: center;
+            font-size: 0.6rem; letter-spacing: 5px; color: rgba(255,255,255,0.6);
+            text-transform: uppercase; opacity: 0; transition: opacity 2s;
         }
 
-        /* STAGE 3: THE FINAL MESSAGE */
+        /* STAGE 3: FINAL MESSAGE */
         #final-message {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: none; justify-content: center; align-items: center;
             flex-direction: column; text-align: center; z-index: 20;
             padding: 30px;
+            background: rgba(0,0,0,0.3);
         }
 
-        .line { opacity: 0; margin: 12px 0; transition: opacity 3.5s ease; }
-        .handwritten { font-family: 'Reenie Beanie', cursive; font-size: 2.6rem; color: #fff; }
-        .gently { color: #d4af37; font-weight: 300; letter-spacing: 5px; }
+        .line { opacity: 0; margin: 10px 0; transition: opacity 2.5s ease; }
+        .handwritten { font-family: 'Reenie Beanie', cursive; font-size: 2.5rem; color: #fff; }
 
         @keyframes twinkle {
             0%, 100% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.1); opacity: 1; filter: brightness(1.2); }
+            50% { transform: scale(1.1); opacity: 1; }
         }
     </style>
 </head>
 <body>
 
-    <canvas id="starfield"></canvas>
+    <div id="galaxy-bg"></div>
 
     <div id="landing">
         <div class="quiet-text" id="t1">Some hugs don’t wrap arms.</div>
@@ -104,70 +103,35 @@
         <div class="quiet-text line" id="l2">some things still reach the heart.</div>
         <div class="handwritten line" id="l3" style="margin-top: 40px;">This is me,</div>
         <div class="handwritten line" id="l4">thinking of you...</div>
-        <div class="handwritten line" id="l5">the only way I can —</div>
-        <div class="quiet-text line gently" id="l6">gently.</div>
+        <div class="handwritten line" id="l5">the only way I can.</div>
     </div>
 
     <script>
-        // --- STARFIELD BACKGROUND ---
-        const canvas = document.getElementById('starfield');
-        const ctx = canvas.getContext('2d');
-        let stars = [];
-
-        function initStars() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            stars = [];
-            for (let i = 0; i < 150; i++) {
-                stars.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    size: Math.random() * 1.5,
-                    opacity: Math.random(),
-                    speed: Math.random() * 0.01
-                });
-            }
-        }
-
-        function drawStars() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            stars.forEach(s => {
-                ctx.fillStyle = `rgba(255, 255, 255, ${s.opacity})`;
-                ctx.beginPath();
-                ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
-                ctx.fill();
-                s.opacity += s.speed;
-                if (s.opacity > 1 || s.opacity < 0) s.speed *= -1;
-            });
-            requestAnimationFrame(drawStars);
-        }
-
-        initStars(); drawStars();
-        window.addEventListener('resize', initStars);
-
-        // --- FLOW LOGIC ---
         const landing = document.getElementById('landing');
         const stage = document.getElementById('interaction-stage');
         const final = document.getElementById('final-message');
         const orbL = document.getElementById('orbL');
         const orbR = document.getElementById('orbR');
+        const galaxy = document.getElementById('galaxy-bg');
         
         let merged = false;
         let lPos = 15;
         let rPos = 70;
 
+        // Optimized Pacing
         window.onload = () => {
-            setTimeout(() => document.getElementById('t1').style.opacity = "1", 2000);
-            setTimeout(() => document.getElementById('t2').style.opacity = "1", 5000);
+            setTimeout(() => document.getElementById('t1').style.opacity = "1", 1000);
+            setTimeout(() => document.getElementById('t2').style.opacity = "1", 3000);
             
             setTimeout(() => {
                 landing.style.opacity = "0";
                 setTimeout(() => {
                     landing.style.display = "none";
                     stage.style.display = "block";
-                    setTimeout(() => document.getElementById('instruction').style.opacity = "1", 2000);
-                }, 3000);
-            }, 10000);
+                    galaxy.style.transform = "scale(1.1)";
+                    setTimeout(() => document.getElementById('instruction').style.opacity = "1", 1000);
+                }, 2000);
+            }, 7000);
         };
 
         function moveOrb(e, side) {
@@ -183,7 +147,7 @@
                 orbR.style.left = rPos + "%";
             }
             
-            if(Math.abs(lPos - rPos) < 12) {
+            if(Math.abs(lPos - rPos) < 10) {
                 triggerMerge();
             }
         }
@@ -197,23 +161,23 @@
         function triggerMerge() {
             merged = true;
             document.getElementById('instruction').style.opacity = "0";
-            orbL.style.transition = orbR.style.transition = "all 2.5s ease-in-out";
-            orbL.style.left = orbR.style.left = "45%";
+            orbL.style.transition = orbR.style.transition = "all 1.5s ease-in-out";
+            orbL.style.left = orbR.style.left = "42%";
             orbL.style.transform = orbR.style.transform = "scale(15)";
             orbL.style.opacity = orbR.style.opacity = "0";
 
             setTimeout(() => {
                 stage.style.display = "none";
                 final.style.display = "flex";
-                document.body.style.background = "#1a1212"; // Warm deep glow
+                galaxy.style.opacity = "0.3"; 
                 
-                const lines = ['l1', 'l2', 'l3', 'l4', 'l5', 'l6'];
+                const lines = ['l1', 'l2', 'l3', 'l4', 'l5'];
                 lines.forEach((id, index) => {
                     setTimeout(() => {
                         document.getElementById(id).style.opacity = "1";
-                    }, index * 3500);
+                    }, index * 2000); // Snappier reveal
                 });
-            }, 2500);
+            }, 1500);
         }
     </script>
 </body>
