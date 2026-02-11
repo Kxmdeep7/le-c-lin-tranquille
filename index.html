@@ -15,46 +15,49 @@
             font-family: 'Montserrat', sans-serif;
         }
 
-        /* LIVE GALAXY - High performance */
+        /* THE REAL MILKY WAY ENHANCEMENT */
         #galaxy-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=2022&auto=format&fit=crop') no-repeat center center;
+            /* Using a high-fidelity space texture with warm tones */
+            background: url('https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?q=80&w=2071&auto=format&fit=crop') no-repeat center center;
             background-size: cover;
             z-index: 0;
-            filter: brightness(0.5) contrast(1.1);
-            animation: slowPan 40s linear infinite alternate;
+            filter: brightness(0.6) contrast(1.1);
+            animation: slowDrift 30s linear infinite alternate;
         }
 
         #landing {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; justify-content: center; align-items: center;
             z-index: 10; flex-direction: column; text-align: center;
-            background: rgba(0,0,0,0.3);
+            background: rgba(0,0,0,0.2);
         }
 
         .quiet-text {
-            color: #fff; font-size: 1rem; letter-spacing: 4px;
+            color: #fff; font-size: 1.1rem; letter-spacing: 4px;
             opacity: 0; transition: opacity 1s ease; line-height: 2.5;
             font-weight: 200;
+            text-shadow: 0 0 15px rgba(0,0,0,0.5);
         }
 
-        /* STAR ORBS - Warm White/Gold Tone */
+        /* WARM STAR ORBS */
         #interaction-stage {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: none; z-index: 5;
         }
 
         .star-orb {
-            position: absolute; width: 80px; height: 80px;
-            background: radial-gradient(circle, #fff 0%, rgba(255, 248, 220, 0.6) 30%, transparent 70%);
+            position: absolute; width: 85px; height: 85px;
+            /* Warm white to match the galaxy dust */
+            background: radial-gradient(circle, #fff 5%, rgba(255, 220, 180, 0.4) 40%, transparent 75%);
             border-radius: 50%; cursor: pointer;
             z-index: 15;
-            box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
         }
 
         #instruction {
             position: absolute; bottom: 15%; width: 100%; text-align: center;
-            font-size: 0.6rem; letter-spacing: 5px; color: rgba(255,255,255,0.6);
+            font-size: 0.6rem; letter-spacing: 5px; color: rgba(255,255,255,0.7);
             text-transform: uppercase; opacity: 0; transition: opacity 1s;
         }
 
@@ -66,11 +69,11 @@
         }
 
         .line { opacity: 0; margin: 10px 0; transition: opacity 1.5s ease; }
-        .handwritten { font-family: 'Reenie Beanie', cursive; font-size: 2.6rem; color: #fff; }
+        .handwritten { font-family: 'Reenie Beanie', cursive; font-size: 2.8rem; color: #fff; }
 
-        @keyframes slowPan {
-            from { transform: scale(1.1) translateX(-2%); }
-            to { transform: scale(1.2) translateX(2%); }
+        @keyframes slowDrift {
+            from { transform: scale(1.1) rotate(0deg); }
+            to { transform: scale(1.2) rotate(1deg); }
         }
 
     </style>
@@ -93,13 +96,12 @@
     <div id="final-message">
         <div class="quiet-text line" id="l1">Even from far away,</div>
         <div class="quiet-text line" id="l2">some things still reach the heart.</div>
-        <div class="handwritten line" id="l3" style="margin-top: 30px;">This is me,</div>
+        <div class="handwritten line" id="l3" style="margin-top: 40px;">This is me,</div>
         <div class="handwritten line" id="l4">thinking of you...</div>
         <div class="handwritten line" id="l5">the only way I can.</div>
     </div>
 
     <script>
-        // FAST, INTENTIONAL PACING
         window.onload = () => {
             setTimeout(() => document.getElementById('t1').style.opacity = "1", 600);
             setTimeout(() => document.getElementById('t2').style.opacity = "1", 1800);
@@ -111,7 +113,7 @@
                     document.getElementById('interaction-stage').style.display = "block";
                     setTimeout(() => document.getElementById('instruction').style.opacity = "1", 600);
                 }, 1000);
-            }, 5000);
+            }, 4500);
         };
 
         let merged = false;
@@ -147,7 +149,7 @@
             const oL = document.getElementById('orbL');
             const oR = document.getElementById('orbR');
             
-            oL.style.transition = oR.style.transition = "all 1.2s ease-in-out";
+            oL.style.transition = oR.style.transition = "all 1s ease-out";
             oL.style.left = oR.style.left = "42%";
             oL.style.transform = oR.style.transform = "scale(15)";
             oL.style.opacity = oR.style.opacity = "0";
@@ -160,9 +162,9 @@
                 lines.forEach((id, index) => {
                     setTimeout(() => {
                         document.getElementById(id).style.opacity = "1";
-                    }, index * 1400); 
+                    }, index * 1200); 
                 });
-            }, 1200);
+            }, 1000);
         }
     </script>
 </body>
