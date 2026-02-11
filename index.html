@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>le câlin tranquille 🫂</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300&family=Reenie+Beanie&display=swap');
+
+        /* All previous styles remain exactly the same to preserve your flow */
+        * { margin: 0; padding: 0; box-sizing: border-box; touch-action: none; }
+        
+        body { 
+            background: #fdfaf1; 
+            overflow: hidden; 
+            font-family: 'Montserrat', sans-serif;
+            transition: background 4s ease-in-out;
+        }
+
+        #bg-glow {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(255, 195, 160, 0.3) 0%, transparent 70%);
+            animation: breathe 10s infinite ease-in-out;
+            pointer-events: none; z-index: 1;
+        }
+
+        #landing {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 10; flex-direction: column; text-align: center;
+            padding: 20px;
+        }
+
+        .quiet-text {
+            color: #7a6e67; font-size: 1rem; letter-spacing: 3px;
+            opacity: 0; transition: opacity 3s ease; line-height: 2.5;
+            font-weight: 200;
+        }
+
+        #interaction-stage {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            display: none; z-index: 5;
+        }
+
+        .orb {
+            position: absolute; width: 70px; height: 70px;
+            background: radial-gradient(circle, #fff 10%, rgba(255, 195, 160, 0.4) 60%, transparent 100%);
+            border-radius: 50%; filter: blur(4px); cursor: pointer;
+            z-index: 15;
+        }
+
+        #instruction {
+            position: absolute; bottom: 12%; width: 100%; text-align: center;
+            font-size: 0.55rem; letter-spacing: 5px; color: #a3938b;
+            text-transform: uppercase; opacity: 0; transition: opacity 3s;
+        }
+
+        #final-message {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            display: none; justify-content: center; align-items: center;
+            flex-direction: column; text-align: center; z-index: 20;
+            padding: 30px;
+        }
+
+        .line { opacity: 0; margin: 12px 0; transition: opacity 3.5s ease; }
+        .handwritten { font-family: 'Reenie Beanie', cursive; font-size: 2.4rem; color: #7a6e67; }
+        .gently { color: #d8a48f; font-weight: 300; letter-spacing: 4px; }
+
+        #stay {
+            position: absolute; bottom: 8%; font-size: 0.5rem; letter-spacing: 4px;
+            color: #a3938b; opacity: 0; transition: opacity 5s ease;
+        }
+
+        @keyframes breathe { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 0.7; transform: scale(1.15); } }
+    </style>
+</head>
+<body>
+
+    <div id="bg-glow"></div>
+
+    <div id="landing">
+        <div class="quiet-text" id="t1">Some hugs don’t wrap arms.</div>
+        <div class="quiet-text" id="t2">They wrap peace.</div>
+    </div>
+
+    <div id="interaction-stage">
+        <div class="orb" id="orbL" style="top: 45%; left: 10%;"></div>
+        <div class="orb" id="orbR" style="top: 45%; left: 75%;"></div>
+        <div id="instruction">Take your time.</div>
+    </div>
+
+    <div id="final-message">
+        <div class="quiet-text line" id="l1">Even from far away,</div>
+        <div class="quiet-text line" id="l2">some things still reach the heart.</div>
+        <div class="handwritten line" id="l3" style="margin-top: 40px;">This is me,</div>
+        <div class="handwritten line" id="l4">thinking of you...</div>
+        <div class="handwritten line" id="l5">the only way I can —</div>
+        <div class="quiet-text line gently" id="l6">gently.</div>
+        <div id="stay">STAY AS LONG AS YOU NEED.</div>
+    </div>
+
+    <script>
+        // JS logic remains identical to the previous functional version
+        const landing = document.getElementById('landing');
+        const stage = document.getElementById('interaction-stage');
+        const final = document.getElementById('final-message');
+        const orbL = document.getElementById('orbL');
+        const orbR = document.getElementById('orbR');
+        
+        let merged = false;
+        let lPos = 10;
+        let rPos = 75;
+
+        window.onload = () => {
+            setTimeout(() => document.getElementById('t1').style.opacity = "1", 2000);
+            setTimeout(() => document.getElementById('t2').style.opacity = "1", 5000);
+            
+            setTimeout(() => {
+                landing.style.opacity = "0";
+                setTimeout(() => {
+                    landing.style.display = "none";
+                    document.body.style.background = "#ece5d5";
+                    stage.style.display = "block";
+                    setTimeout(() => document.getElementById('instruction').style.opacity = "1", 1500);
+                }, 3000);
+            }, 10000);
+        };
+
+        function moveOrb(e, side) {
+            if(merged) return;
+            const x = e.touches ? e.touches[0].clientX : e.clientX;
+            const percent = (x / window.innerWidth) * 100;
+            
+            if(side === 'L') {
+                lPos = Math.min(percent, rPos - 5);
+                orbL.style.left = lPos + "%";
+            } else {
+                rPos = Math.max(percent, lPos + 5);
+                orbR.style.left = rPos + "%";
+            }
+            
+            if(Math.abs(lPos - rPos) < 10) {
+                triggerMerge();
+            }
+        }
+
+        orbL.addEventListener('touchmove', (e) => moveOrb(e, 'L'));
+        orbR.addEventListener('touchmove', (e) => moveOrb(e, 'R'));
+        orbL.addEventListener('mousedown', () => document.onmousemove = (e) => moveOrb(e, 'L'));
+        orbR.addEventListener('mousedown', () => document.onmousemove = (e) => moveOrb(e, 'R'));
+        document.onmouseup = () => document.onmousemove = null;
+
+        function triggerMerge() {
+            merged = true;
+            document.getElementById('instruction').style.opacity = "0";
+            orbL.style.transition = orbR.style.transition = "all 2s ease-in-out";
+            orbL.style.left = orbR.style.left = "45%";
+            orbL.style.transform = orbR.style.transform = "scale(8)";
+            orbL.style.opacity = orbR.style.opacity = "0";
+
+            setTimeout(() => {
+                stage.style.display = "none";
+                final.style.display = "flex";
+                document.body.style.background = "#fdfaf1";
+                
+                const lines = ['l1', 'l2', 'l3', 'l4', 'l5', 'l6'];
+                lines.forEach((id, index) => {
+                    setTimeout(() => {
+                        document.getElementById(id).style.opacity = "1";
+                    }, index * 3500);
+                });
+
+                setTimeout(() => {
+                    document.getElementById('stay').style.opacity = "1";
+                }, 22000);
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
