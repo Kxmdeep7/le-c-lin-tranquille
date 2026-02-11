@@ -5,60 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>le câlin tranquille 🫂</title>
     <style>
-        /* Robotic/Tech Fonts */
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500&family=Share+Tech+Mono&family=Reenie+Beanie&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300&family=Reenie+Beanie&display=swap');
 
         * { margin: 0; padding: 0; box-sizing: border-box; touch-action: none; }
         
         body { 
             background: #000; 
             overflow: hidden; 
-            font-family: 'Share Tech Mono', monospace; /* Robotic feel */
-            color: #00f2ff; /* Cyber blue glow */
+            font-family: 'Montserrat', sans-serif;
         }
 
-        /* LIVE GALAXY FEEL - Ultra-clear background */
+        /* LIVE GALAXY - High performance */
         #galaxy-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=2022&auto=format&fit=crop') no-repeat center center;
             background-size: cover;
             z-index: 0;
-            filter: brightness(0.6) contrast(1.2);
-            animation: slowPan 60s linear infinite; /* Living motion */
+            filter: brightness(0.5) contrast(1.1);
+            animation: slowPan 40s linear infinite alternate;
         }
 
         #landing {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; justify-content: center; align-items: center;
             z-index: 10; flex-direction: column; text-align: center;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0,0,0,0.3);
         }
 
         .quiet-text {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.9rem; letter-spacing: 5px;
-            opacity: 0; transition: opacity 0.8s ease; line-height: 3;
-            text-transform: uppercase;
+            color: #fff; font-size: 1rem; letter-spacing: 4px;
+            opacity: 0; transition: opacity 1s ease; line-height: 2.5;
+            font-weight: 200;
         }
 
-        /* STAR ORBS */
+        /* STAR ORBS - Warm White/Gold Tone */
         #interaction-stage {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: none; z-index: 5;
         }
 
         .star-orb {
-            position: absolute; width: 70px; height: 70px;
-            background: radial-gradient(circle, #fff 0%, #00f2ff 30%, transparent 70%);
+            position: absolute; width: 80px; height: 80px;
+            background: radial-gradient(circle, #fff 0%, rgba(255, 248, 220, 0.6) 30%, transparent 70%);
             border-radius: 50%; cursor: pointer;
             z-index: 15;
-            box-shadow: 0 0 30px rgba(0, 242, 255, 0.5);
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
         }
 
         #instruction {
             position: absolute; bottom: 15%; width: 100%; text-align: center;
-            font-size: 0.7rem; letter-spacing: 4px; color: #00f2ff;
-            opacity: 0; transition: opacity 1s;
+            font-size: 0.6rem; letter-spacing: 5px; color: rgba(255,255,255,0.6);
+            text-transform: uppercase; opacity: 0; transition: opacity 1s;
         }
 
         /* FINAL MESSAGE */
@@ -68,19 +65,12 @@
             flex-direction: column; text-align: center; z-index: 20;
         }
 
-        .line { opacity: 0; margin: 10px 0; transition: opacity 1.2s ease; }
-        
-        /* The handwritten part remains for contrast */
-        .handwritten { 
-            font-family: 'Reenie Beanie', cursive; 
-            font-size: 2.8rem; 
-            color: #fff; 
-            text-shadow: 0 0 10px rgba(255,255,255,0.5);
-        }
+        .line { opacity: 0; margin: 10px 0; transition: opacity 1.5s ease; }
+        .handwritten { font-family: 'Reenie Beanie', cursive; font-size: 2.6rem; color: #fff; }
 
         @keyframes slowPan {
-            from { transform: scale(1.1) rotate(0deg); }
-            to { transform: scale(1.3) rotate(2deg); }
+            from { transform: scale(1.1) translateX(-2%); }
+            to { transform: scale(1.2) translateX(2%); }
         }
 
     </style>
@@ -90,38 +80,38 @@
     <div id="galaxy-bg"></div>
 
     <div id="landing">
-        <div class="quiet-text" id="t1">SYNCING HUG PROTOCOL...</div>
-        <div class="quiet-text" id="t2">Some hugs wrap peace.</div>
+        <div class="quiet-text" id="t1">Some hugs don’t wrap arms.</div>
+        <div class="quiet-text" id="t2">They wrap peace.</div>
     </div>
 
     <div id="interaction-stage">
         <div class="star-orb" id="orbL" style="top: 45%; left: 15%;"></div>
         <div class="star-orb" id="orbR" style="top: 45%; left: 70%;"></div>
-        <div id="instruction">MANUAL OVERRIDE: CLOSE DISTANCE</div>
+        <div id="instruction">Close the distance.</div>
     </div>
 
     <div id="final-message">
-        <div class="quiet-text line" id="l1">SIGNAL RECEIVED.</div>
-        <div class="quiet-text line" id="l2">Distance is just a variable.</div>
+        <div class="quiet-text line" id="l1">Even from far away,</div>
+        <div class="quiet-text line" id="l2">some things still reach the heart.</div>
         <div class="handwritten line" id="l3" style="margin-top: 30px;">This is me,</div>
         <div class="handwritten line" id="l4">thinking of you...</div>
         <div class="handwritten line" id="l5">the only way I can.</div>
     </div>
 
     <script>
-        // FAST PACING
+        // FAST, INTENTIONAL PACING
         window.onload = () => {
-            setTimeout(() => document.getElementById('t1').style.opacity = "1", 500);
-            setTimeout(() => document.getElementById('t2').style.opacity = "1", 1500);
+            setTimeout(() => document.getElementById('t1').style.opacity = "1", 600);
+            setTimeout(() => document.getElementById('t2').style.opacity = "1", 1800);
             
             setTimeout(() => {
                 document.getElementById('landing').style.opacity = "0";
                 setTimeout(() => {
                     document.getElementById('landing').style.display = "none";
                     document.getElementById('interaction-stage').style.display = "block";
-                    setTimeout(() => document.getElementById('instruction').style.opacity = "1", 500);
-                }, 800);
-            }, 4000);
+                    setTimeout(() => document.getElementById('instruction').style.opacity = "1", 600);
+                }, 1000);
+            }, 5000);
         };
 
         let merged = false;
@@ -157,7 +147,7 @@
             const oL = document.getElementById('orbL');
             const oR = document.getElementById('orbR');
             
-            oL.style.transition = oR.style.transition = "all 0.8s ease-out";
+            oL.style.transition = oR.style.transition = "all 1.2s ease-in-out";
             oL.style.left = oR.style.left = "42%";
             oL.style.transform = oR.style.transform = "scale(15)";
             oL.style.opacity = oR.style.opacity = "0";
@@ -170,9 +160,9 @@
                 lines.forEach((id, index) => {
                     setTimeout(() => {
                         document.getElementById(id).style.opacity = "1";
-                    }, index * 1000); 
+                    }, index * 1400); 
                 });
-            }, 800);
+            }, 1200);
         }
     </script>
 </body>
