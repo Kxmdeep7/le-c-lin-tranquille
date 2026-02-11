@@ -9,23 +9,12 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; touch-action: none; }
         
-        body { 
-            background: #050508; 
-            overflow: hidden; 
-            font-family: 'Montserrat', sans-serif;
-        }
+        body { background: #000; overflow: hidden; font-family: 'Montserrat', sans-serif; color: #fff; }
 
-        /* INSTANT GALAXY BACKGROUND (Pure CSS) */
-        #galaxy-bg {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: 
-                radial-gradient(circle at 20% 30%, rgba(50, 30, 80, 0.4) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(80, 40, 40, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, #050508 0%, #000 100%);
-            z-index: 0;
-            animation: slowDrift 20s infinite alternate ease-in-out;
-        }
+        /* RELIABLE SPACE BACKGROUND */
+        #space { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
 
+        /* STAGE 1: LANDING */
         #landing {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; justify-content: center; align-items: center;
@@ -33,51 +22,40 @@
         }
 
         .quiet-text {
-            color: #fff; font-size: 1.1rem; letter-spacing: 4px;
-            opacity: 0; transition: opacity 0.8s ease; line-height: 2.5;
-            font-weight: 200;
+            font-size: 1rem; letter-spacing: 4px; opacity: 0;
+            transition: opacity 1s ease; line-height: 2.5; font-weight: 200;
         }
 
-        /* WARM STAR ORBS */
-        #interaction-stage {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            display: none; z-index: 5;
-        }
+        /* STAGE 2: STAR ORBS */
+        #interaction-stage { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: none; z-index: 5; }
 
         .star-orb {
-            position: absolute; width: 80px; height: 80px;
-            background: radial-gradient(circle, #fff 5%, rgba(255, 230, 200, 0.5) 40%, transparent 75%);
-            border-radius: 50%; cursor: pointer;
-            z-index: 15;
-            box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
-            transition: transform 0.2s ease;
+            position: absolute; width: 40px; height: 40px; /* Smaller, delicate size */
+            background: radial-gradient(circle, #fff 0%, rgba(255, 248, 220, 0.4) 40%, transparent 80%);
+            border-radius: 50%; cursor: pointer; z-index: 15;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
         }
 
         #instruction {
             position: absolute; bottom: 15%; width: 100%; text-align: center;
-            font-size: 0.6rem; letter-spacing: 5px; color: rgba(255,255,255,0.5);
+            font-size: 0.6rem; letter-spacing: 5px; color: rgba(255,255,255,0.4);
             text-transform: uppercase; opacity: 0; transition: opacity 1s;
         }
 
-        /* FINAL MESSAGE */
+        /* STAGE 3: FINAL */
         #final-message {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: none; justify-content: center; align-items: center;
             flex-direction: column; text-align: center; z-index: 20;
         }
 
-        .line { opacity: 0; margin: 10px 0; transition: opacity 1.2s ease; }
-        .handwritten { font-family: 'Reenie Beanie', cursive; font-size: 2.8rem; color: #fff; }
+        .handwritten { font-family: 'Reenie Beanie', cursive; font-size: 2.8rem; opacity: 0; transition: opacity 2s ease; }
 
-        @keyframes slowDrift {
-            from { transform: scale(1); }
-            to { transform: scale(1.1); }
-        }
     </style>
 </head>
 <body>
 
-    <div id="galaxy-bg"></div>
+    <canvas id="space"></canvas>
 
     <div id="landing">
         <div class="quiet-text" id="t1">Some hugs don’t wrap arms.</div>
@@ -86,57 +64,91 @@
 
     <div id="interaction-stage">
         <div class="star-orb" id="orbL" style="top: 45%; left: 15%;"></div>
-        <div class="star-orb" id="orbR" style="top: 45%; left: 70%;"></div>
+        <div class="star-orb" id="orbR" style="top: 45%; left: 75%;"></div>
         <div id="instruction">Close the distance.</div>
     </div>
 
     <div id="final-message">
-        <div class="quiet-text line" id="l1">Even from far away,</div>
-        <div class="quiet-text line" id="l2">some things still reach the heart.</div>
-        <div class="handwritten line" id="l3" style="margin-top: 40px;">This is me,</div>
-        <div class="handwritten line" id="l4">thinking of you...</div>
-        <div class="handwritten line" id="l5">the only way I can.</div>
+        <div class="handwritten" id="l1" style="margin-bottom: 20px;">This is me, thinking of you...</div>
+        <div class="handwritten" id="l2">the only way I can.</div>
     </div>
 
     <script>
-        // CRITICAL: Faster Pacing & Instant Trigger
+        // 1. GENERATE DYNAMIC STARFIELD (The Real Space feel)
+        const canvas = document.getElementById('space');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+        let trails = [];
+
+        function init() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            stars = [];
+            for (let i = 0; i < 200; i++) {
+                stars.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, size: Math.random() * 1.5, o: Math.random() });
+            }
+        }
+
+        function draw() {
+            ctx.fillStyle = "#000";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Background Stars
+            stars.forEach(s => {
+                ctx.fillStyle = `rgba(255, 255, 255, ${s.o})`;
+                ctx.beginPath(); ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2); ctx.fill();
+            });
+
+            // Stardust Trails
+            trails.forEach((t, i) => {
+                ctx.fillStyle = `rgba(255, 255, 255, ${t.o})`;
+                ctx.beginPath(); ctx.arc(t.x, t.y, 1, 0, Math.PI * 2); ctx.fill();
+                t.o -= 0.02;
+                if(t.o <= 0) trails.splice(i, 1);
+            });
+            requestAnimationFrame(draw);
+        }
+        init(); draw();
+
+        // 2. PACING & FLOW
         window.onload = () => {
-            setTimeout(() => document.getElementById('t1').style.opacity = "1", 400);
-            setTimeout(() => document.getElementById('t2').style.opacity = "1", 1400);
+            setTimeout(() => document.getElementById('t1').style.opacity = "1", 800);
+            setTimeout(() => document.getElementById('t2').style.opacity = "1", 2000);
             
             setTimeout(() => {
                 document.getElementById('landing').style.opacity = "0";
                 setTimeout(() => {
                     document.getElementById('landing').style.display = "none";
                     document.getElementById('interaction-stage').style.display = "block";
-                    setTimeout(() => document.getElementById('instruction').style.opacity = "1", 400);
-                }, 800);
-            }, 3800);
+                    setTimeout(() => document.getElementById('instruction').style.opacity = "1", 500);
+                }, 1000);
+            }, 4500);
         };
 
         let merged = false;
-        let lPos = 15;
-        let rPos = 70;
+        let lPos = 15; let rPos = 75;
 
         function moveOrb(e, side) {
             if(merged) return;
             const x = e.touches ? e.touches[0].clientX : e.clientX;
+            const y = e.touches ? e.touches[0].clientY : e.clientY;
             const percent = (x / window.innerWidth) * 100;
             
+            // Add stardust trail
+            trails.push({ x: x, y: y, o: 0.8 });
+
             if(side === 'L') {
-                lPos = Math.min(percent, rPos - 8);
+                lPos = Math.min(percent, rPos - 5);
                 document.getElementById('orbL').style.left = lPos + "%";
             } else {
-                rPos = Math.max(percent, lPos + 8);
+                rPos = Math.max(percent, lPos + 5);
                 document.getElementById('orbR').style.left = rPos + "%";
             }
             
-            if(Math.abs(lPos - rPos) < 12) triggerMerge();
+            if(Math.abs(lPos - rPos) < 10) triggerMerge();
         }
 
-        // Event Listeners
-        const oL = document.getElementById('orbL');
-        const oR = document.getElementById('orbR');
+        const oL = document.getElementById('orbL'); const oR = document.getElementById('orbR');
         oL.addEventListener('touchmove', (e) => moveOrb(e, 'L'));
         oR.addEventListener('touchmove', (e) => moveOrb(e, 'R'));
         oL.onmousedown = () => document.onmousemove = (e) => moveOrb(e, 'L');
@@ -144,26 +156,19 @@
         document.onmouseup = () => document.onmousemove = null;
 
         function triggerMerge() {
-            if(merged) return;
             merged = true;
             document.getElementById('instruction').style.opacity = "0";
-            
-            oL.style.transition = oR.style.transition = "all 0.8s ease-out";
-            oL.style.left = oR.style.left = "43%";
-            oL.style.transform = oR.style.transform = "scale(15)";
+            oL.style.transition = oR.style.transition = "all 1s ease-out";
+            oL.style.left = oR.style.left = "45%";
+            oL.style.transform = oR.style.transform = "scale(10)";
             oL.style.opacity = oR.style.opacity = "0";
 
             setTimeout(() => {
                 document.getElementById('interaction-stage').style.display = "none";
                 document.getElementById('final-message').style.display = "flex";
-                
-                const lines = ['l1', 'l2', 'l3', 'l4', 'l5'];
-                lines.forEach((id, index) => {
-                    setTimeout(() => {
-                        document.getElementById(id).style.opacity = "1";
-                    }, index * 1000); 
-                });
-            }, 800);
+                setTimeout(() => document.getElementById('l1').style.opacity = "1", 500);
+                setTimeout(() => document.getElementById('l2').style.opacity = "1", 2500);
+            }, 1000);
         }
     </script>
 </body>
