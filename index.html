@@ -10,34 +10,32 @@
         * { margin: 0; padding: 0; box-sizing: border-box; touch-action: none; }
         
         body { 
-            background: #000; 
+            background: #050508; 
             overflow: hidden; 
             font-family: 'Montserrat', sans-serif;
         }
 
-        /* THE REAL MILKY WAY ENHANCEMENT */
+        /* INSTANT GALAXY BACKGROUND (Pure CSS) */
         #galaxy-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            /* Using a high-fidelity space texture with warm tones */
-            background: url('https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?q=80&w=2071&auto=format&fit=crop') no-repeat center center;
-            background-size: cover;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(50, 30, 80, 0.4) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(80, 40, 40, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, #050508 0%, #000 100%);
             z-index: 0;
-            filter: brightness(0.6) contrast(1.1);
-            animation: slowDrift 30s linear infinite alternate;
+            animation: slowDrift 20s infinite alternate ease-in-out;
         }
 
         #landing {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; justify-content: center; align-items: center;
             z-index: 10; flex-direction: column; text-align: center;
-            background: rgba(0,0,0,0.2);
         }
 
         .quiet-text {
             color: #fff; font-size: 1.1rem; letter-spacing: 4px;
-            opacity: 0; transition: opacity 1s ease; line-height: 2.5;
+            opacity: 0; transition: opacity 0.8s ease; line-height: 2.5;
             font-weight: 200;
-            text-shadow: 0 0 15px rgba(0,0,0,0.5);
         }
 
         /* WARM STAR ORBS */
@@ -47,17 +45,17 @@
         }
 
         .star-orb {
-            position: absolute; width: 85px; height: 85px;
-            /* Warm white to match the galaxy dust */
-            background: radial-gradient(circle, #fff 5%, rgba(255, 220, 180, 0.4) 40%, transparent 75%);
+            position: absolute; width: 80px; height: 80px;
+            background: radial-gradient(circle, #fff 5%, rgba(255, 230, 200, 0.5) 40%, transparent 75%);
             border-radius: 50%; cursor: pointer;
             z-index: 15;
             box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+            transition: transform 0.2s ease;
         }
 
         #instruction {
             position: absolute; bottom: 15%; width: 100%; text-align: center;
-            font-size: 0.6rem; letter-spacing: 5px; color: rgba(255,255,255,0.7);
+            font-size: 0.6rem; letter-spacing: 5px; color: rgba(255,255,255,0.5);
             text-transform: uppercase; opacity: 0; transition: opacity 1s;
         }
 
@@ -68,14 +66,13 @@
             flex-direction: column; text-align: center; z-index: 20;
         }
 
-        .line { opacity: 0; margin: 10px 0; transition: opacity 1.5s ease; }
+        .line { opacity: 0; margin: 10px 0; transition: opacity 1.2s ease; }
         .handwritten { font-family: 'Reenie Beanie', cursive; font-size: 2.8rem; color: #fff; }
 
         @keyframes slowDrift {
-            from { transform: scale(1.1) rotate(0deg); }
-            to { transform: scale(1.2) rotate(1deg); }
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
         }
-
     </style>
 </head>
 <body>
@@ -102,18 +99,19 @@
     </div>
 
     <script>
+        // CRITICAL: Faster Pacing & Instant Trigger
         window.onload = () => {
-            setTimeout(() => document.getElementById('t1').style.opacity = "1", 600);
-            setTimeout(() => document.getElementById('t2').style.opacity = "1", 1800);
+            setTimeout(() => document.getElementById('t1').style.opacity = "1", 400);
+            setTimeout(() => document.getElementById('t2').style.opacity = "1", 1400);
             
             setTimeout(() => {
                 document.getElementById('landing').style.opacity = "0";
                 setTimeout(() => {
                     document.getElementById('landing').style.display = "none";
                     document.getElementById('interaction-stage').style.display = "block";
-                    setTimeout(() => document.getElementById('instruction').style.opacity = "1", 600);
-                }, 1000);
-            }, 4500);
+                    setTimeout(() => document.getElementById('instruction').style.opacity = "1", 400);
+                }, 800);
+            }, 3800);
         };
 
         let merged = false;
@@ -126,31 +124,32 @@
             const percent = (x / window.innerWidth) * 100;
             
             if(side === 'L') {
-                lPos = Math.min(percent, rPos - 5);
+                lPos = Math.min(percent, rPos - 8);
                 document.getElementById('orbL').style.left = lPos + "%";
             } else {
-                rPos = Math.max(percent, lPos + 5);
+                rPos = Math.max(percent, lPos + 8);
                 document.getElementById('orbR').style.left = rPos + "%";
             }
             
-            if(Math.abs(lPos - rPos) < 10) triggerMerge();
+            if(Math.abs(lPos - rPos) < 12) triggerMerge();
         }
 
-        document.getElementById('orbL').addEventListener('touchmove', (e) => moveOrb(e, 'L'));
-        document.getElementById('orbR').addEventListener('touchmove', (e) => moveOrb(e, 'R'));
-        document.getElementById('orbL').onmousedown = () => document.onmousemove = (e) => moveOrb(e, 'L');
-        document.getElementById('orbR').onmousedown = () => document.onmousemove = (e) => moveOrb(e, 'R');
+        // Event Listeners
+        const oL = document.getElementById('orbL');
+        const oR = document.getElementById('orbR');
+        oL.addEventListener('touchmove', (e) => moveOrb(e, 'L'));
+        oR.addEventListener('touchmove', (e) => moveOrb(e, 'R'));
+        oL.onmousedown = () => document.onmousemove = (e) => moveOrb(e, 'L');
+        oR.onmousedown = () => document.onmousemove = (e) => moveOrb(e, 'R');
         document.onmouseup = () => document.onmousemove = null;
 
         function triggerMerge() {
+            if(merged) return;
             merged = true;
             document.getElementById('instruction').style.opacity = "0";
             
-            const oL = document.getElementById('orbL');
-            const oR = document.getElementById('orbR');
-            
-            oL.style.transition = oR.style.transition = "all 1s ease-out";
-            oL.style.left = oR.style.left = "42%";
+            oL.style.transition = oR.style.transition = "all 0.8s ease-out";
+            oL.style.left = oR.style.left = "43%";
             oL.style.transform = oR.style.transform = "scale(15)";
             oL.style.opacity = oR.style.opacity = "0";
 
@@ -162,9 +161,9 @@
                 lines.forEach((id, index) => {
                     setTimeout(() => {
                         document.getElementById(id).style.opacity = "1";
-                    }, index * 1200); 
+                    }, index * 1000); 
                 });
-            }, 1000);
+            }, 800);
         }
     </script>
 </body>
