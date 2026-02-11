@@ -5,82 +5,84 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>le câlin tranquille 🫂</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300&family=Reenie+Beanie&display=swap');
+        /* Robotic/Tech Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500&family=Share+Tech+Mono&family=Reenie+Beanie&display=swap');
 
         * { margin: 0; padding: 0; box-sizing: border-box; touch-action: none; }
         
         body { 
             background: #000; 
             overflow: hidden; 
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Share Tech Mono', monospace; /* Robotic feel */
+            color: #00f2ff; /* Cyber blue glow */
         }
 
-        /* REAL GALAXY BACKGROUND */
+        /* LIVE GALAXY FEEL - Ultra-clear background */
         #galaxy-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://images.unsplash.com/photo-1506318137071-a8e063b4bcc0?q=80&w=2070&auto=format&fit=crop') no-repeat center center;
+            background: url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=2022&auto=format&fit=crop') no-repeat center center;
             background-size: cover;
-            opacity: 0.6;
             z-index: 0;
-            filter: brightness(0.8);
-            transition: transform 10s ease-out, opacity 4s;
+            filter: brightness(0.6) contrast(1.2);
+            animation: slowPan 60s linear infinite; /* Living motion */
         }
 
         #landing {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; justify-content: center; align-items: center;
             z-index: 10; flex-direction: column; text-align: center;
-            background: rgba(0,0,0,0.4);
+            background: rgba(0,0,0,0.6);
         }
 
         .quiet-text {
-            color: #fff; font-size: 1.1rem; letter-spacing: 4px;
-            opacity: 0; transition: opacity 2s ease; line-height: 2.5;
-            font-weight: 200;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem; letter-spacing: 5px;
+            opacity: 0; transition: opacity 0.8s ease; line-height: 3;
+            text-transform: uppercase;
         }
 
-        /* STAGE 2: STAR ORBS */
+        /* STAR ORBS */
         #interaction-stage {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: none; z-index: 5;
         }
 
         .star-orb {
-            position: absolute; width: 80px; height: 80px;
-            background: radial-gradient(circle, #fff 0%, rgba(255, 255, 255, 0.8) 15%, rgba(212, 175, 55, 0.3) 50%, transparent 70%);
+            position: absolute; width: 70px; height: 70px;
+            background: radial-gradient(circle, #fff 0%, #00f2ff 30%, transparent 70%);
             border-radius: 50%; cursor: pointer;
             z-index: 15;
-            animation: twinkle 2s infinite ease-in-out;
-        }
-
-        .star-core {
-            position: absolute; top: 48%; left: 48%;
-            width: 4px; height: 4px; background: white;
-            border-radius: 50%; box-shadow: 0 0 20px 3px white;
+            box-shadow: 0 0 30px rgba(0, 242, 255, 0.5);
         }
 
         #instruction {
             position: absolute; bottom: 15%; width: 100%; text-align: center;
-            font-size: 0.6rem; letter-spacing: 5px; color: rgba(255,255,255,0.6);
-            text-transform: uppercase; opacity: 0; transition: opacity 2s;
+            font-size: 0.7rem; letter-spacing: 4px; color: #00f2ff;
+            opacity: 0; transition: opacity 1s;
         }
 
-        /* STAGE 3: FINAL MESSAGE */
+        /* FINAL MESSAGE */
         #final-message {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: none; justify-content: center; align-items: center;
             flex-direction: column; text-align: center; z-index: 20;
-            padding: 30px;
-            background: rgba(0,0,0,0.3);
         }
 
-        .line { opacity: 0; margin: 10px 0; transition: opacity 2.5s ease; }
-        .handwritten { font-family: 'Reenie Beanie', cursive; font-size: 2.5rem; color: #fff; }
-
-        @keyframes twinkle {
-            0%, 100% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.1); opacity: 1; }
+        .line { opacity: 0; margin: 10px 0; transition: opacity 1.2s ease; }
+        
+        /* The handwritten part remains for contrast */
+        .handwritten { 
+            font-family: 'Reenie Beanie', cursive; 
+            font-size: 2.8rem; 
+            color: #fff; 
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
         }
+
+        @keyframes slowPan {
+            from { transform: scale(1.1) rotate(0deg); }
+            to { transform: scale(1.3) rotate(2deg); }
+        }
+
     </style>
 </head>
 <body>
@@ -88,51 +90,43 @@
     <div id="galaxy-bg"></div>
 
     <div id="landing">
-        <div class="quiet-text" id="t1">Some hugs don’t wrap arms.</div>
-        <div class="quiet-text" id="t2">They wrap peace.</div>
+        <div class="quiet-text" id="t1">SYNCING HUG PROTOCOL...</div>
+        <div class="quiet-text" id="t2">Some hugs wrap peace.</div>
     </div>
 
     <div id="interaction-stage">
-        <div class="star-orb" id="orbL" style="top: 45%; left: 15%;"><div class="star-core"></div></div>
-        <div class="star-orb" id="orbR" style="top: 45%; left: 70%;"><div class="star-core"></div></div>
-        <div id="instruction">Close the distance.</div>
+        <div class="star-orb" id="orbL" style="top: 45%; left: 15%;"></div>
+        <div class="star-orb" id="orbR" style="top: 45%; left: 70%;"></div>
+        <div id="instruction">MANUAL OVERRIDE: CLOSE DISTANCE</div>
     </div>
 
     <div id="final-message">
-        <div class="quiet-text line" id="l1">Even from far away,</div>
-        <div class="quiet-text line" id="l2">some things still reach the heart.</div>
-        <div class="handwritten line" id="l3" style="margin-top: 40px;">This is me,</div>
+        <div class="quiet-text line" id="l1">SIGNAL RECEIVED.</div>
+        <div class="quiet-text line" id="l2">Distance is just a variable.</div>
+        <div class="handwritten line" id="l3" style="margin-top: 30px;">This is me,</div>
         <div class="handwritten line" id="l4">thinking of you...</div>
         <div class="handwritten line" id="l5">the only way I can.</div>
     </div>
 
     <script>
-        const landing = document.getElementById('landing');
-        const stage = document.getElementById('interaction-stage');
-        const final = document.getElementById('final-message');
-        const orbL = document.getElementById('orbL');
-        const orbR = document.getElementById('orbR');
-        const galaxy = document.getElementById('galaxy-bg');
-        
+        // FAST PACING
+        window.onload = () => {
+            setTimeout(() => document.getElementById('t1').style.opacity = "1", 500);
+            setTimeout(() => document.getElementById('t2').style.opacity = "1", 1500);
+            
+            setTimeout(() => {
+                document.getElementById('landing').style.opacity = "0";
+                setTimeout(() => {
+                    document.getElementById('landing').style.display = "none";
+                    document.getElementById('interaction-stage').style.display = "block";
+                    setTimeout(() => document.getElementById('instruction').style.opacity = "1", 500);
+                }, 800);
+            }, 4000);
+        };
+
         let merged = false;
         let lPos = 15;
         let rPos = 70;
-
-        // Optimized Pacing
-        window.onload = () => {
-            setTimeout(() => document.getElementById('t1').style.opacity = "1", 1000);
-            setTimeout(() => document.getElementById('t2').style.opacity = "1", 3000);
-            
-            setTimeout(() => {
-                landing.style.opacity = "0";
-                setTimeout(() => {
-                    landing.style.display = "none";
-                    stage.style.display = "block";
-                    galaxy.style.transform = "scale(1.1)";
-                    setTimeout(() => document.getElementById('instruction').style.opacity = "1", 1000);
-                }, 2000);
-            }, 7000);
-        };
 
         function moveOrb(e, side) {
             if(merged) return;
@@ -141,43 +135,44 @@
             
             if(side === 'L') {
                 lPos = Math.min(percent, rPos - 5);
-                orbL.style.left = lPos + "%";
+                document.getElementById('orbL').style.left = lPos + "%";
             } else {
                 rPos = Math.max(percent, lPos + 5);
-                orbR.style.left = rPos + "%";
+                document.getElementById('orbR').style.left = rPos + "%";
             }
             
-            if(Math.abs(lPos - rPos) < 10) {
-                triggerMerge();
-            }
+            if(Math.abs(lPos - rPos) < 10) triggerMerge();
         }
 
-        orbL.addEventListener('touchmove', (e) => moveOrb(e, 'L'));
-        orbR.addEventListener('touchmove', (e) => moveOrb(e, 'R'));
-        orbL.addEventListener('mousedown', () => document.onmousemove = (e) => moveOrb(e, 'L'));
-        orbR.addEventListener('mousedown', () => document.onmousemove = (e) => moveOrb(e, 'R'));
+        document.getElementById('orbL').addEventListener('touchmove', (e) => moveOrb(e, 'L'));
+        document.getElementById('orbR').addEventListener('touchmove', (e) => moveOrb(e, 'R'));
+        document.getElementById('orbL').onmousedown = () => document.onmousemove = (e) => moveOrb(e, 'L');
+        document.getElementById('orbR').onmousedown = () => document.onmousemove = (e) => moveOrb(e, 'R');
         document.onmouseup = () => document.onmousemove = null;
 
         function triggerMerge() {
             merged = true;
             document.getElementById('instruction').style.opacity = "0";
-            orbL.style.transition = orbR.style.transition = "all 1.5s ease-in-out";
-            orbL.style.left = orbR.style.left = "42%";
-            orbL.style.transform = orbR.style.transform = "scale(15)";
-            orbL.style.opacity = orbR.style.opacity = "0";
+            
+            const oL = document.getElementById('orbL');
+            const oR = document.getElementById('orbR');
+            
+            oL.style.transition = oR.style.transition = "all 0.8s ease-out";
+            oL.style.left = oR.style.left = "42%";
+            oL.style.transform = oR.style.transform = "scale(15)";
+            oL.style.opacity = oR.style.opacity = "0";
 
             setTimeout(() => {
-                stage.style.display = "none";
-                final.style.display = "flex";
-                galaxy.style.opacity = "0.3"; 
+                document.getElementById('interaction-stage').style.display = "none";
+                document.getElementById('final-message').style.display = "flex";
                 
                 const lines = ['l1', 'l2', 'l3', 'l4', 'l5'];
                 lines.forEach((id, index) => {
                     setTimeout(() => {
                         document.getElementById(id).style.opacity = "1";
-                    }, index * 2000); // Snappier reveal
+                    }, index * 1000); 
                 });
-            }, 1500);
+            }, 800);
         }
     </script>
 </body>
