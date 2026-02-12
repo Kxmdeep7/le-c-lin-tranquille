@@ -9,9 +9,29 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; touch-action: none; }
         
-        body { background: #000; overflow: hidden; font-family: 'Cormorant Garamond', serif; color: #fff; }
+        body { 
+            background: #1a0a2e; /* Deep Twilight Base */
+            overflow: hidden; 
+            font-family: 'Cormorant Garamond', serif; 
+            color: #fff; 
+        }
 
-        #space { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+        /* DYNAMIC SUNSET LAYER */
+        #sunset-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(180deg, #1a1a2e 0%, #6b2d5c 40%, #e88d67 100%);
+            z-index: 1;
+            transition: opacity 4s ease;
+        }
+
+        /* GALAXY LAYER (Hidden initially) */
+        #space-canvas { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            z-index: 2; 
+            opacity: 0; 
+            transition: opacity 5s ease;
+            background: #000;
+        }
 
         #landing {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -19,17 +39,12 @@
             z-index: 10; flex-direction: column; text-align: center;
         }
 
-        /* GROUNDED SYSTEM TEXT */
         .quiet-text {
-            font-size: 1.5rem; 
-            letter-spacing: 3px; 
-            font-style: italic;
-            opacity: 0;
-            transition: opacity 2s ease, transform 2s ease; 
-            line-height: 2.2; 
-            font-weight: 400;
+            font-size: 1.5rem; letter-spacing: 3px; font-style: italic;
+            opacity: 0; transition: opacity 2s ease, transform 2s ease; 
+            line-height: 2.2; font-weight: 400;
             color: rgba(255, 252, 240, 0.95);
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            text-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
             transform: translateY(5px);
         }
 
@@ -37,17 +52,19 @@
 
         #interaction-stage { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: none; z-index: 5; }
 
-        /* THE ORBS */
+        /* THE GLOWING ORBS (Enhanced Bloom) */
         .star-orb {
             position: absolute; width: 80px; height: 80px;
-            background: radial-gradient(circle, #fff 0%, rgba(255, 248, 220, 0.5) 40%, transparent 80%);
             border-radius: 50%; cursor: pointer; z-index: 15;
-            box-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 35px rgba(255, 255, 255, 0.5), 0 0 60px rgba(255, 255, 255, 0.2);
+            transition: transform 0.2s ease;
         }
+        #orbL { background: radial-gradient(circle, #fff 10%, #ffcc80 40%, transparent 80%); }
+        #orbR { background: radial-gradient(circle, #fff 10%, #b3e5fc 40%, transparent 80%); }
 
         #instruction {
-            position: absolute; bottom: 15%; width: 100%; text-align: center;
-            font-size: 0.8rem; letter-spacing: 5px; color: rgba(255,255,255,0.4);
+            position: absolute; bottom: 12%; width: 100%; text-align: center;
+            font-size: 0.8rem; letter-spacing: 5px; color: rgba(255,255,255,0.7);
             text-transform: uppercase; opacity: 0; transition: opacity 1.5s;
         }
 
@@ -58,22 +75,17 @@
         }
 
         .line { margin: 10px 0; }
-
-        /* THE REFINED FINAL TEXT VOICE */
         .handwritten { 
-            font-family: 'Reenie Beanie', cursive; 
-            font-size: 3.2rem; 
-            color: #fff; 
-            opacity: 0;
-            transition: opacity 2.5s ease;
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+            font-family: 'Reenie Beanie', cursive; font-size: 3.2rem; color: #fff; 
+            opacity: 0; transition: opacity 2.5s ease;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
         }
-
     </style>
 </head>
 <body>
 
-    <canvas id="space"></canvas>
+    <div id="sunset-bg"></div>
+    <canvas id="space-canvas"></canvas>
 
     <div id="landing">
         <div class="quiet-text" id="t1">Some hugs don’t wrap arms.</div>
@@ -89,23 +101,21 @@
     <div id="final-message">
         <div class="quiet-text line" id="l1">Even across the lightyears,</div>
         <div class="quiet-text line" id="l2">heartbeats still find their way.</div>
-        
         <div class="handwritten line" id="l3" style="margin-top: 35px;">This is me,</div>
         <div class="handwritten line" id="l4">reaching for you...</div>
         <div class="handwritten line" id="l5">until the distance fades.</div>
     </div>
 
     <script>
-        // BACKGROUND & DUSK TRAIL LOGIC
-        const canvas = document.getElementById('space');
+        const canvas = document.getElementById('space-canvas');
         const ctx = canvas.getContext('2d');
+        const sunset = document.getElementById('sunset-bg');
         let stars = [];
         let trails = [];
 
         function init() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            stars = [];
             for (let i = 0; i < 200; i++) {
                 stars.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, size: Math.random() * 1.5, o: Math.random() });
             }
@@ -120,7 +130,7 @@
             });
             trails.forEach((t, i) => {
                 ctx.fillStyle = `rgba(255, 255, 255, ${t.o})`;
-                ctx.beginPath(); ctx.arc(t.x, t.y, 1.2, 0, Math.PI * 2); ctx.fill();
+                ctx.beginPath(); ctx.arc(t.x, t.y, 1.5, 0, Math.PI * 2); ctx.fill();
                 t.o -= 0.015;
                 if(t.o <= 0) trails.splice(i, 1);
             });
@@ -128,10 +138,9 @@
         }
         init(); draw();
 
-        // PACING
         window.onload = () => {
-            setTimeout(() => document.getElementById('t1').classList.add('show'), 1000);
-            setTimeout(() => document.getElementById('t2').classList.add('show'), 2800);
+            setTimeout(() => document.getElementById('t1').classList.add('show'), 1200);
+            setTimeout(() => document.getElementById('t2').classList.add('show'), 3000);
             setTimeout(() => {
                 document.getElementById('landing').style.opacity = "0";
                 setTimeout(() => {
@@ -139,7 +148,7 @@
                     document.getElementById('interaction-stage').style.display = "block";
                     setTimeout(() => document.getElementById('instruction').style.opacity = "1", 1000);
                 }, 1500);
-            }, 6500);
+            }, 6800);
         };
 
         let merged = false;
@@ -151,8 +160,11 @@
             const y = e.touches ? e.touches[0].clientY : e.clientY;
             const percent = (x / window.innerWidth) * 100;
             
-            trails.push({ x: x, y: y, o: 0.7 }); // The Trail
+            // THE TRIGGER: Reveal the Night
+            canvas.style.opacity = "1";
+            sunset.style.opacity = "0";
 
+            trails.push({ x: x, y: y, o: 0.8 });
             if(side === 'L') {
                 lPos = Math.min(percent, rPos - 5);
                 document.getElementById('orbL').style.left = lPos + "%";
@@ -175,7 +187,7 @@
             document.getElementById('instruction').style.opacity = "0";
             oL.style.transition = oR.style.transition = "all 2s ease-out";
             oL.style.left = oR.style.left = "43%";
-            oL.style.transform = oR.style.transform = "scale(18)";
+            oL.style.transform = oR.style.transform = "scale(20)";
             oL.style.opacity = oR.style.opacity = "0";
             setTimeout(() => {
                 document.getElementById('interaction-stage').style.display = "none";
@@ -186,7 +198,7 @@
                         const el = document.getElementById(id);
                         if (el.classList.contains('quiet-text')) el.classList.add('show');
                         else el.style.opacity = "1";
-                    }, i * 2000);
+                    }, i * 1800);
                 });
             }, 1500);
         }
