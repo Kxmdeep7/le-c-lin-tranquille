@@ -9,30 +9,44 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; touch-action: none; }
         
-        body { 
-            background: #1a0a2e; /* Deep Twilight Base */
-            overflow: hidden; 
-            font-family: 'Cormorant Garamond', serif; 
-            color: #fff; 
-        }
+        body { background: #000; overflow: hidden; font-family: 'Cormorant Garamond', serif; color: #fff; }
 
-        /* DYNAMIC SUNSET LAYER */
+        /* SUNSET & NATURE STAGE */
         #sunset-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(180deg, #1a1a2e 0%, #6b2d5c 40%, #e88d67 100%);
-            z-index: 1;
-            transition: opacity 4s ease;
+            z-index: 1; transition: opacity 4s ease;
         }
 
-        /* GALAXY LAYER (Hidden initially) */
-        #space-canvas { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            z-index: 2; 
-            opacity: 0; 
-            transition: opacity 5s ease;
-            background: #000;
+        .tree-silhouette {
+            position: absolute; bottom: -10px; width: 100%; height: 30%;
+            background: url('https://www.transparentpng.com/download/tree/forest-silhouette-free-download-transparent-3.png') repeat-x bottom;
+            background-size: contain; z-index: 2; opacity: 0.8;
         }
 
+        .bird {
+            position: absolute; width: 15px; height: 10px;
+            background: black; clip-path: polygon(0% 50%, 50% 100%, 100% 50%, 50% 40%);
+            animation: fly 15s linear infinite; z-index: 1; opacity: 0.6;
+        }
+
+        @keyframes fly {
+            from { left: -50px; transform: translateY(0) rotate(5deg); }
+            to { left: 110%; transform: translateY(-50px) rotate(-5deg); }
+        }
+
+        /* GALAXY & MOON STAGE */
+        #space-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 3; opacity: 0; transition: opacity 5s ease; background: #000; }
+        
+        #moon {
+            position: fixed; top: 15%; right: 15%; width: 60px; height: 60px;
+            background: radial-gradient(circle, #fff 20%, #e0e0e0 60%, transparent 100%);
+            border-radius: 50%; z-index: 4; opacity: 0;
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.4);
+            transition: opacity 6s ease;
+        }
+
+        /* TEXT & INTERACTION */
         #landing {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; justify-content: center; align-items: center;
@@ -40,11 +54,9 @@
         }
 
         .quiet-text {
-            font-size: 1.5rem; letter-spacing: 3px; font-style: italic;
-            opacity: 0; transition: opacity 2s ease, transform 2s ease; 
-            line-height: 2.2; font-weight: 400;
-            color: rgba(255, 252, 240, 0.95);
-            text-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            font-size: 1.5rem; letter-spacing: 3px; font-style: italic; opacity: 0;
+            transition: opacity 2s ease, transform 2s ease; line-height: 2.2;
+            color: rgba(255, 252, 240, 0.95); text-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
             transform: translateY(5px);
         }
 
@@ -52,12 +64,9 @@
 
         #interaction-stage { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: none; z-index: 5; }
 
-        /* THE GLOWING ORBS (Enhanced Bloom) */
         .star-orb {
-            position: absolute; width: 80px; height: 80px;
-            border-radius: 50%; cursor: pointer; z-index: 15;
-            box-shadow: 0 0 35px rgba(255, 255, 255, 0.5), 0 0 60px rgba(255, 255, 255, 0.2);
-            transition: transform 0.2s ease;
+            position: absolute; width: 80px; height: 80px; border-radius: 50%;
+            cursor: pointer; z-index: 15; box-shadow: 0 0 35px rgba(255, 255, 255, 0.5);
         }
         #orbL { background: radial-gradient(circle, #fff 10%, #ffcc80 40%, transparent 80%); }
         #orbR { background: radial-gradient(circle, #fff 10%, #b3e5fc 40%, transparent 80%); }
@@ -78,13 +87,19 @@
         .handwritten { 
             font-family: 'Reenie Beanie', cursive; font-size: 3.2rem; color: #fff; 
             opacity: 0; transition: opacity 2.5s ease;
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
         }
     </style>
 </head>
 <body>
 
-    <div id="sunset-bg"></div>
+    <div id="sunset-bg">
+        <div class="bird" style="top: 20%; animation-delay: 0s;"></div>
+        <div class="bird" style="top: 25%; animation-delay: 2s;"></div>
+        <div class="bird" style="top: 15%; animation-delay: 5s;"></div>
+        <div class="tree-silhouette"></div>
+    </div>
+
+    <div id="moon"></div>
     <canvas id="space-canvas"></canvas>
 
     <div id="landing">
@@ -110,6 +125,7 @@
         const canvas = document.getElementById('space-canvas');
         const ctx = canvas.getContext('2d');
         const sunset = document.getElementById('sunset-bg');
+        const moon = document.getElementById('moon');
         let stars = [];
         let trails = [];
 
@@ -160,7 +176,6 @@
             const y = e.touches ? e.touches[0].clientY : e.clientY;
             const percent = (x / window.innerWidth) * 100;
             
-            // THE TRIGGER: Reveal the Night
             canvas.style.opacity = "1";
             sunset.style.opacity = "0";
 
@@ -185,6 +200,7 @@
         function triggerMerge() {
             merged = true;
             document.getElementById('instruction').style.opacity = "0";
+            moon.style.opacity = "1"; // THE MOON APPEARS
             oL.style.transition = oR.style.transition = "all 2s ease-out";
             oL.style.left = oR.style.left = "43%";
             oL.style.transform = oR.style.transform = "scale(20)";
