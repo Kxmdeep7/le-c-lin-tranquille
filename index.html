@@ -11,52 +11,43 @@
         
         body { background: #000; overflow: hidden; font-family: 'Cormorant Garamond', serif; color: #fff; }
 
-        /* SUNSET STAGE */
+        /* AUTHENTIC SUNSET BACKGROUND */
         #sunset-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(180deg, #1a1a2e 0%, #6b2d5c 40%, #e88d67 100%);
-            z-index: 1; transition: opacity 4s ease;
+            background: linear-gradient(180deg, #12122b 0%, #4a214d 35%, #9e5b4a 70%, #df916d 100%);
+            z-index: 1; transition: opacity 4s ease-in-out;
         }
 
-        /* REFINED TREE LINE */
+        /* REALISTIC FOREST SILHOUETTE (SVG) */
         .forest {
-            position: absolute; bottom: 0; width: 100%; height: 150px;
-            background: #050505;
-            /* Creates a jagged tree-like top without needing an image */
-            clip-path: polygon(0% 100%, 0% 80%, 5% 70%, 10% 85%, 15% 65%, 20% 80%, 25% 60%, 32% 85%, 38% 70%, 45% 85%, 52% 60%, 58% 80%, 65% 70%, 72% 85%, 80% 65%, 88% 80%, 95% 70%, 100% 80%, 100% 100%);
-            z-index: 2;
+            position: absolute; bottom: -5px; width: 100%; height: 25vh;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 250' preserveAspectRatio='none'%3E%3Cpath d='M0,250 L1200,250 L1200,180 C1180,190 1150,160 1120,175 C1080,195 1050,150 1020,170 C980,190 950,140 910,165 C870,190 830,150 790,170 C750,190 710,145 660,165 C620,185 580,140 540,160 C500,180 460,135 410,160 C370,180 330,145 290,165 C250,185 210,140 170,160 C130,180 90,135 40,160 C20,170 0,180 0,180 Z' fill='%23050505'/%3E%3C/svg%3E");
+            background-size: cover; z-index: 3;
         }
 
-        /* ANIMATED BIRDS */
-        .bird {
-            position: absolute; width: 12px; height: 8px;
-            z-index: 2;
-        }
-        .bird::before, .bird::after {
-            content: ''; position: absolute; width: 50%; height: 2px;
-            background: #000; border-radius: 2px;
-            animation: flap 0.6s ease-in-out infinite alternate;
-        }
-        .bird::before { left: 0; transform-origin: right; transform: rotate(-30deg); }
-        .bird::after { right: 0; transform-origin: left; transform: rotate(30deg); }
-
-        @keyframes flap {
-            from { transform: rotate(-30deg) scaleY(1); }
-            to { transform: rotate(30deg) scaleY(0.5); }
+        /* ATMOSPHERIC HAZE */
+        .haze {
+            position: absolute; bottom: 0; width: 100%; height: 40%;
+            background: linear-gradient(to top, rgba(0,0,0,0.4), transparent);
+            z-index: 2; pointer-events: none;
         }
 
-        .fly-1 { animation: drift 20s linear infinite; top: 20%; left: -50px; }
-        .fly-2 { animation: drift 24s linear infinite 4s; top: 25%; left: -50px; }
-        .fly-3 { animation: drift 18s linear infinite 8s; top: 15%; left: -50px; }
+        /* AUTHENTIC BIRD ANIMATION */
+        .bird-container {
+            position: absolute; z-index: 2;
+            animation: move-bird 25s linear infinite;
+        }
+        .bird-svg { width: 25px; height: auto; fill: #000; opacity: 0.7; }
 
-        @keyframes drift {
-            to { left: 110%; transform: translateY(-30px); }
+        @keyframes move-bird {
+            from { transform: translate(-50px, 0); }
+            to { transform: translate(110vw, -40px); }
         }
 
         /* GALAXY STAGE */
-        #space-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 3; opacity: 0; transition: opacity 5s ease; background: #000; }
+        #space-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 4; opacity: 0; transition: opacity 5s ease; background: #000; }
 
-        /* TEXT & INTERACTION */
+        /* TEXTS & ORBS */
         #landing {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; justify-content: center; align-items: center;
@@ -64,9 +55,9 @@
         }
 
         .quiet-text {
-            font-size: 1.5rem; letter-spacing: 3px; font-style: italic; opacity: 0;
-            transition: opacity 2s ease, transform 2s ease; line-height: 2.2;
-            color: rgba(255, 252, 240, 0.95); transform: translateY(5px);
+            font-size: 1.4rem; letter-spacing: 4px; font-style: italic; opacity: 0;
+            transition: opacity 2.5s ease, transform 2s ease; line-height: 2.2;
+            color: rgba(255, 252, 240, 0.9); transform: translateY(8px);
         }
 
         .show { opacity: 1 !important; transform: translateY(0) !important; }
@@ -74,16 +65,17 @@
         #interaction-stage { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: none; z-index: 5; }
 
         .star-orb {
-            position: absolute; width: 80px; height: 80px; border-radius: 50%;
-            cursor: pointer; z-index: 15; box-shadow: 0 0 35px rgba(255, 255, 255, 0.5);
+            position: absolute; width: 85px; height: 85px; border-radius: 50%;
+            cursor: pointer; z-index: 15;
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.4), 0 0 80px rgba(255, 255, 255, 0.1);
         }
-        #orbL { background: radial-gradient(circle, #fff 10%, #ffcc80 40%, transparent 80%); }
-        #orbR { background: radial-gradient(circle, #fff 10%, #b3e5fc 40%, transparent 80%); }
+        #orbL { background: radial-gradient(circle, #fff 15%, #ffcc80 45%, transparent 85%); }
+        #orbR { background: radial-gradient(circle, #fff 15%, #b3e5fc 45%, transparent 85%); }
 
         #instruction {
-            position: absolute; bottom: 15%; width: 100%; text-align: center;
-            font-size: 0.8rem; letter-spacing: 5px; color: rgba(255,255,255,0.7);
-            text-transform: uppercase; opacity: 0; transition: opacity 1.5s;
+            position: absolute; bottom: 18%; width: 100%; text-align: center;
+            font-size: 0.75rem; letter-spacing: 6px; color: rgba(255,255,255,0.5);
+            text-transform: uppercase; opacity: 0; transition: opacity 2s;
         }
 
         #final-message {
@@ -93,17 +85,22 @@
         }
 
         .handwritten { 
-            font-family: 'Reenie Beanie', cursive; font-size: 3.2rem; color: #fff; 
-            opacity: 0; transition: opacity 2.5s ease; margin: 10px 0;
+            font-family: 'Reenie Beanie', cursive; font-size: 3.4rem; color: #fff; 
+            opacity: 0; transition: opacity 3s ease; margin: 8px 0;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
         }
     </style>
 </head>
 <body>
 
     <div id="sunset-bg">
-        <div class="bird fly-1"></div>
-        <div class="bird fly-2"></div>
-        <div class="bird fly-3"></div>
+        <div class="haze"></div>
+        <div class="bird-container" style="top: 22%; animation-duration: 22s;">
+            <svg class="bird-svg" viewBox="0 0 20 20"><path d="M0,10 C5,12 8,5 10,10 C12,5 15,12 20,10 L18,11 C13,13 12,8 10,12 C8,8 7,13 2,11 Z"/></svg>
+        </div>
+        <div class="bird-container" style="top: 15%; animation-delay: 4s; animation-duration: 28s;">
+            <svg class="bird-svg" viewBox="0 0 20 20"><path d="M0,10 C5,12 8,5 10,10 C12,5 15,12 20,10 L18,11 C13,13 12,8 10,12 C8,8 7,13 2,11 Z"/></svg>
+        </div>
         <div class="forest"></div>
     </div>
 
@@ -121,9 +118,9 @@
     </div>
 
     <div id="final-message">
-        <div class="quiet-text" id="l1" style="margin-bottom: 10px;">Even across the lightyears,</div>
-        <div class="quiet-text" id="l2" style="margin-bottom: 10px;">heartbeats still find their way.</div>
-        <div class="handwritten" id="l3" style="margin-top: 25px;">This is me,</div>
+        <div class="quiet-text" id="l1">Even across the lightyears,</div>
+        <div class="quiet-text" id="l2">heartbeats still find their way.</div>
+        <div class="handwritten" id="l3" style="margin-top: 30px;">This is me,</div>
         <div class="handwritten" id="l4">reaching for you...</div>
         <div class="handwritten" id="l5">until the distance fades.</div>
     </div>
@@ -137,8 +134,8 @@
         function init() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            for (let i = 0; i < 200; i++) {
-                stars.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, size: Math.random() * 1.5, o: Math.random() });
+            for (let i = 0; i < 250; i++) {
+                stars.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, size: Math.random() * 1.2, o: Math.random() });
             }
         }
 
@@ -150,24 +147,24 @@
             });
             trails.forEach((t, i) => {
                 ctx.fillStyle = `rgba(255, 255, 255, ${t.o})`;
-                ctx.beginPath(); ctx.arc(t.x, t.y, 1.5, 0, Math.PI * 2); ctx.fill();
-                t.o -= 0.015; if(t.o <= 0) trails.splice(i, 1);
+                ctx.beginPath(); ctx.arc(t.x, t.y, 1.2, 0, Math.PI * 2); ctx.fill();
+                t.o -= 0.012; if(t.o <= 0) trails.splice(i, 1);
             });
             requestAnimationFrame(draw);
         }
         init(); draw();
 
         window.onload = () => {
-            setTimeout(() => document.getElementById('t1').classList.add('show'), 1200);
-            setTimeout(() => document.getElementById('t2').classList.add('show'), 3000);
+            setTimeout(() => document.getElementById('t1').classList.add('show'), 1500);
+            setTimeout(() => document.getElementById('t2').classList.add('show'), 3500);
             setTimeout(() => {
                 document.getElementById('landing').style.opacity = "0";
                 setTimeout(() => {
                     document.getElementById('landing').style.display = "none";
                     document.getElementById('interaction-stage').style.display = "block";
-                    setTimeout(() => document.getElementById('instruction').style.opacity = "1", 1000);
+                    setTimeout(() => document.getElementById('instruction').style.opacity = "1", 1500);
                 }, 1500);
-            }, 6800);
+            }, 7500);
         };
 
         let merged = false;
@@ -182,7 +179,7 @@
             canvas.style.opacity = "1";
             sunset.style.opacity = "0";
 
-            trails.push({ x: x, y: y, o: 0.8 });
+            trails.push({ x: x, y: y, o: 0.7 });
             if(side === 'L') {
                 lPos = Math.min(percent, rPos - 5);
                 document.getElementById('orbL').style.left = lPos + "%";
@@ -203,9 +200,9 @@
         function triggerMerge() {
             merged = true;
             document.getElementById('instruction').style.opacity = "0";
-            oL.style.transition = oR.style.transition = "all 2s ease-out";
+            oL.style.transition = oR.style.transition = "all 2.5s cubic-bezier(0.4, 0, 0.2, 1)";
             oL.style.left = oR.style.left = "43%";
-            oL.style.transform = oR.style.transform = "scale(20)";
+            oL.style.transform = oR.style.transform = "scale(25)";
             oL.style.opacity = oR.style.opacity = "0";
             setTimeout(() => {
                 document.getElementById('interaction-stage').style.display = "none";
@@ -216,9 +213,9 @@
                         const el = document.getElementById(id);
                         if (el.classList.contains('quiet-text')) el.classList.add('show');
                         else el.style.opacity = "1";
-                    }, i * 1800);
+                    }, i * 2200);
                 });
-            }, 1500);
+            }, 1800);
         }
     </script>
 </body>
